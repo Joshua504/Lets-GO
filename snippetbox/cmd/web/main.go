@@ -7,12 +7,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Joshua504/Lets-GO/snippetbox/internal/models"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
 // define an application struct to hold the application-wide dependencies for the web application
 type application struct {
 	logger *slog.Logger
+	snippets *models.SnippetModel
 }
 
 func main() {
@@ -35,6 +38,7 @@ func main() {
 
 	app := &application{
 		logger: logger,
+		snippets: &models.SnippetModel{DB: db},
 	}
 
 	//use the INFO() method to log the starting server message
