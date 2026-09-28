@@ -14,7 +14,7 @@ import (
 
 // define an application struct to hold the application-wide dependencies for the web application
 type application struct {
-	logger *slog.Logger
+	logger   *slog.Logger
 	snippets *models.SnippetModel
 }
 
@@ -37,7 +37,7 @@ func main() {
 	defer db.Close()
 
 	app := &application{
-		logger: logger,
+		logger:   logger,
 		snippets: &models.SnippetModel{DB: db},
 	}
 
@@ -65,5 +65,5 @@ func openDB(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	return nil, err
+	return db, err
 }
