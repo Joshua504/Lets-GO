@@ -26,7 +26,7 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	//define a new command-line flag for the MySQL DSN string
-	dsn := flag.String("dsn", "web:laaq2003@/snippetbox?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "web:1234@/snippetbox?parseTime=true", "MySQL data source name")
 	db, err := openDB(*dsn) //calling the sql.open()method from the function openDB()
 	if err != nil {
 		logger.Error(err.Error())
