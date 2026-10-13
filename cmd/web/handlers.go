@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -16,13 +15,15 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, r, err)
 		return
 	}
-	for _, snippet := range snippets {
-		fmt.Fprintf(w, "%+v\n", snippet)
-	}
+
+	app.render(w, r, http.StatusOK, "home.html", templateData{
+		Snippets: snippets,
+	})
+
 	//files := []string{
-	//	"./ui/html/base.tmpl",
-	//	"./ui/html/partials/nav.tmpl",
-	//	"./ui/html/pages/home.tmpl",
+	//	"./ui/html/base.html",
+	//	"./ui/html/partials/nav.html",
+	//	"./ui/html/pages/home.html",
 	//}
 	//
 	//ts, err := template.ParseFiles(files...)
@@ -31,7 +32,11 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	//	return
 	//}
 	//
-	//err = ts.ExecuteTemplate(w, "base", nil)
+	//data := templateData{
+	//	Snippets: snippets,
+	//}
+	//
+	//err = ts.ExecuteTemplate(w, "base", data)
 	//if err != nil {
 	//	app.serverError(w, r, err) // using the serverError() helper
 	//} // use the serverError() helper
@@ -56,26 +61,30 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	files := []string{
-		"./ui/html/base.tmpl",
-		"./ui/html/partials/nav.tmpl",
-		"./ui/html/pages/view.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, r, err)
-		return
-	}
-
-	data := templateData{
+	app.render(w, r, http.StatusOK, "view.html", templateData{
 		Snippet: snippet,
-	}
+	})
 
-	err = ts.ExecuteTemplate(w, "base", data)
-	if err != nil {
-		app.serverError(w, r, err)
-	}
+	//files := []string{
+	//	"./ui/html/base.html",
+	//	"./ui/html/partials/nav.html",
+	//	"./ui/html/pages/view.html",
+	//}
+	//
+	//ts, err := template.ParseFiles(files...)
+	//if err != nil {
+	//	app.serverError(w, r, err)
+	//	return
+	//}
+	//
+	//data := templateData{
+	//	Snippet: snippet,
+	//}
+	//
+	//err = ts.ExecuteTemplate(w, "base", data)
+	//if err != nil {
+	//	app.serverError(w, r, err)
+	//}
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {

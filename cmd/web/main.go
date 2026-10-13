@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"os"
@@ -14,8 +15,9 @@ import (
 
 // define an application struct to hold the application-wide dependencies for the web application
 type application struct {
-	logger   *slog.Logger
-	snippets *models.SnippetModel
+	logger        *slog.Logger
+	snippets      *models.SnippetModel
+	templateCache map[string]*template.Template
 }
 
 func main() {
@@ -36,9 +38,16 @@ func main() {
 	//we also defer a call to db.close(), so that the connection pool is closed before the main() function exits.
 	defer db.Close()
 
+	templateCache, err := newTemplateCache()
+	if err != nil{
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
 	app := &application{
 		logger:   logger,
 		snippets: &models.SnippetModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	//use the INFO() method to log the starting server message
